@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import Button from '@material-ui/core/Button'
 import {makeStyles} from '@material-ui/core/styles'   
 import Grid from '@material-ui/core/Grid'
@@ -17,12 +17,34 @@ const PATH_FLOWER_CLOSE = 'flower-close.png'
 
 const Flower = () => {
   const classes = useStyles()
+  
   const [open, setOpen] = useState(false)
+  const [isNight, setIsNight] = useState(false)
+  
   
   const handleClick = () => {
     setOpen(!open)
   }
 
+  useEffect(() => {
+    const interval = setInterval(() => setIsNight(isNight => !isNight), 5000)
+    return () => clearInterval(interval)
+  }, [])
+
+  const setFlowerRules = () => {
+    if(isNight){
+      setOpen(false)
+      return
+    }
+
+    setOpen(true)
+  }
+
+  useEffect(() => {
+    setFlowerRules()
+  }, [isNight])
+
+  console.log('isNight', isNight)
   return (
     <Grid
       className={classes.root}
